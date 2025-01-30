@@ -30,9 +30,6 @@ public:
         node *n;
         int p;
         swapper &operator*() {
-          if (p >= n->to) {
-            std::cerr << p << " >= " << n->to << "\n";
-          }
           assert(p < n->to);
           assert(p < size);
           return n->data[p];
@@ -191,18 +188,7 @@ public:
   Pool pool;
   void executeSwap(const swapper &s, int ID) {
     assert(s.idx1 != s.idx2);
-
-    if (layers[processed_level[s.idx1]].getPair(s.idx1) != s.idx2) {
-      std::cerr << s.idx1 << " - " << s.idx2 << "\n";
-      std::cerr << processed_level[s.idx1] << " - " << processed_level[s.idx2]
-                << "\n";
-      std::cerr << layers[processed_level[s.idx1]].getPair(s.idx1) << " !!! ";
-      std::cerr << layers[processed_level[s.idx2]].getPair(s.idx2) << "\n";
-      std::cerr << layers[processed_level[s.idx1] - 1].getPair(s.idx1)
-                << " !!! ";
-      std::cerr << layers[processed_level[s.idx2] - 1].getPair(s.idx2) << "\n";
-      assert(layers[processed_level[s.idx1]].getPair(s.idx1) == s.idx2);
-    }
+    assert(layers[processed_level[s.idx1]].getPair(s.idx1) == s.idx2);
     if ((s.idx1 < s.idx2) != ((*data)[s.idx1] < (*data)[s.idx2]))
       std::swap((*data)[s.idx1], (*data)[s.idx2]);
     processLevelInc(s.idx1, ID);
@@ -296,8 +282,7 @@ int main() {
   }*/
   int mn = v[0];
   for (int val : v) {
-    if (val < mn)
-      std::cerr << "PANIC";
+    assert (val >= mn);
     mn = val;
   }
 }
